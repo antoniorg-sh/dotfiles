@@ -1,80 +1,13 @@
-;; Place your private configuration here! Remember, you do not need to run 'doom
-;; sync' after modifying this file!
-
-
-;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets. It is optional.
-;; (setq user-full-name "John Doe"
-;;       user-mail-address "john@doe.com")
-
-;; Doom exposes five (optional) variables for controlling fonts in Doom:
-;;
-;; - `doom-font' -- the primary font to use
-;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
-;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
-;;   presentations or streaming.
-;; - `doom-symbol-font' -- for symbols
-;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
-;;
-;; See 'C-h v doom-font' for documentation and more examples of what they
-;; accept. For example:
-;;
 (setq
  doom-font (font-spec :family "MonoLisa Nerd Font" :size 19 :weight 'semibold)
  doom-variable-pitch-font (font-spec :family "MonoLisa Nerd Font" :size 19 :weight 'bold))
-;;
-;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
-;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
-;; refresh your font settings. If Emacs still can't find your font, it likely
-;; wasn't installed correctly. Font issues are rarely Doom issues!
 
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-dark+)
 
-;;(setq doom-theme 'doom-kera)
-
-;; This determines the style of line numbers in effect. If set to `nil', line
-;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/brain/C-programming.org")
+(setq org-directory "~/brain/")
 
-
-;; Whenever you reconfigure a package, make sure to wrap your config in an
-;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
-;;
-;;   (after! PACKAGE
-;;     (setq x y))
-;;
-;; The exceptions to this rule:
-;;
-;;   - Setting file/directory variables (like `org-directory')
-;;   - Setting variables which explicitly tell you to set them before their
-;;     package is loaded (see 'C-h v VARIABLE' to look up their documentation).
-;;   - Setting doom variables (which start with 'doom-' or '+').
-;;
-;; Here are some additional functions/macros that will help you configure Doom.
-;;
-;; - `load!' for loading external *.el files relative to this one
-;; - `use-package!' for configuring packages
-;; - `after!' for running code after a package has loaded
-;; - `add-load-path!' for adding directories to the `load-path', relative to
-;;   this file. Emacs searches the `load-path' when you load packages with
-;;   `require' or `use-package'.
-;; - `map!' for binding new keys
-;;
-;; To get information about any of these functions/macros, move the cursor over
-;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
-;; This will open documentation for it, including demos of how they are used.
-;; Alternatively, use `C-h o' to look up a symbol (functions, variables, faces,
-;; etc).
-;;
-;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
-;; they are implemented.
 
 (remove-hook 'dired-mode-hook #'dired-omit-mode)
 (set-face-attribute 'default nil :background "#000000")
@@ -82,7 +15,6 @@
 (add-to-list 'default-frame-alist '(alpha-background . 80))
 
 (defun +doom-dashboard-ascii-banner-fn ()
-  "Insert the 'Socratech' ASCII art as a Doom dashboard banner."
   (let ((banner
                                 '("                _____                      _            _     "
                                   "               /  ___|                    | |          | |    "
@@ -96,7 +28,68 @@
     (dolist (line banner)
       (insert line "\n"))))
 
-;; Tell Doom Emacs to use the above function for its splash screen banner
 (setq +doom-dashboard-ascii-banner-fn #'+doom-dashboard-ascii-banner-fn)
 
 (after! org (setq org-agenda-files '("~/brain/")))
+
+
+(after! org-roam
+  (setq org-roam-directory "~/brain")
+        (setq org-roam-capture-templates
+                '(("d" "default" plain
+                "
+* %<%d-%m-%Y> Protocol
+        :PROPERTIES:
+        :ID:             %(org-id-new)
+        :SLEEP_HOURS:    %^{Sleep Hours}
+        :SLEEP_QUAL:     %^{Sleep Quality (1-10)}
+        :MOOD:           %^{Mood (1-10)}
+        :ENERGY:         %^{Energy (1-10)}
+        :WEIGHT:         %^{Weight (kg)|0}
+        :WAIST SIZE:     %^{Waist size (cm)|0}
+        :CARDIO_MINS:    %^{Cardio Mins|0}
+        :STRENGTH_MINS:  %^{Strength Mins|0}
+        :EXPENSE_TOTAL:  %^{Total Expenses ($)|0}
+        :END:
+
+** Sleep Analysis
+/Dreams, wake up time, grogginess./
+- %?
+
+** Training Log
+/Specific lifts, zones, or perceived exertion./
+-
+
+** The Lexicon (New Vocabulary)
+:PROPERTIES:
+:CATEGORY: Learning
+:END:
+-
+
+** Engineering & Work Tasks
+:PROPERTIES:
+:CATEGORY: Work
+:END:
+*** Priorities (The 'Must Dos')
+- [ ]
+
+** Things I want to learn (Log)
+/What do I want to research?/
+-
+
+** Financial Ledger
+/Update the :EXPENSE_TOTAL: property after filling this./
+| Item Description | Category | Cost ($) |
+|------------------+----------+----------|
+|                  |          |          |
+|------------------+----------+----------|
+| *Total* |          | *0.00* |
+#+TBLFM: $3=vsum(@2$3..@-1$3)
+
+** Closing Reflection
+/Synthesis of the day./"
+                :target (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: :protocol:\n")
+                :unnarrowed t))))
+
+(after! org-capture
+  (set-popup-rule! "^CAPTURE" :actions '(display-buffer-same-window) :select t :quit nil))

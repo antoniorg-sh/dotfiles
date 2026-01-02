@@ -189,5 +189,5 @@
        (rss +org)        ; emacs as an RSS reader
 
        :config
-       (literate +org)
+       ;;(literate +org)
        (default +bindings +smartparens))
