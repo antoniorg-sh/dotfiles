@@ -47,6 +47,10 @@
         :ENERGY:         %^{Energy (1-10)}
         :WEIGHT:         %^{Weight (kg)|0}
         :WAIST SIZE:     %^{Waist size (cm)|0}
+        :FAT:            %^{Fat (g)|0}
+        :PROTEIN:        %^{Protein (g)|0}
+        :CARBS:          %^{Carbohydrates (g)|0}
+        :STEPS:          %^{Steps |0}
         :CARDIO_MINS:    %^{Cardio Mins|0}
         :STRENGTH_MINS:  %^{Strength Mins|0}
         :EXPENSE_TOTAL:  %^{Total Expenses ($)|0}
@@ -83,8 +87,15 @@
 |------------------+----------+----------|
 |                  |          |          |
 |------------------+----------+----------|
-| *Total* |          | *0.00* |
-#+TBLFM: $3=vsum(@2$3..@-1$3)
+| *Total* |           |      |
+#+TBLFM: @>$3=vsum(@2$3..@-1$3)
+
+
+** Things I want to remember 
+:PROPERTIES:
+:CATEGORY: Memories
+:END:
+-
 
 ** Closing Reflection
 /Synthesis of the day./"
