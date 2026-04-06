@@ -30,7 +30,7 @@
 
 (setq +doom-dashboard-ascii-banner-fn #'+doom-dashboard-ascii-banner-fn)
 
-(after! org (setq org-agenda-files '("~/brain/")))
+(after! org (setq org-agenda-files (directory-files-recursively "~/brain/" "\\.org$")))
 
 
 (after! org-roam
@@ -99,8 +99,15 @@
 
 ** Closing Reflection
 /Synthesis of the day./"
-                :target (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: :protocol:\n")
+                :target (file+head "journal/%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+filetags: :protocol:\n")
                 :unnarrowed t))))
+
+(use-package! org-roam-ui
+  :after org-roam
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t))
 
 (after! org-capture
   (set-popup-rule! "^CAPTURE" :actions '(display-buffer-same-window) :select t :quit nil))
